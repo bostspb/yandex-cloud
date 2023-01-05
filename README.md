@@ -35,8 +35,8 @@
 а для заказов интернет-магазина — Managed MySQL коннектор из Yandex Data Transfer.
 
 **Практика** <br>
-1. Синхронизация данных из MySQL
-2. Синхронизация данных из MS SQL Server
+1. [Синхронизация данных из MySQL](3.1_stg_mysql_sync.md)
+2. [Синхронизация данных из MS SQL Server](3.2_stg_sql_server_sync.md)
 
 
 
