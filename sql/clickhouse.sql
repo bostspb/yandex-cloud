@@ -1,3 +1,7 @@
+--
+-- MySQL Sync
+--
+
 CREATE TABLE mysql_sales_order_grid  (
 `entity_id` UInt32,
 `status` Nullable(String),
@@ -59,11 +63,16 @@ WHERE entity_id > (SELECT MAX(entity_id) from sales_order);
 
 SELECT * FROM system.disks; 
 
-/*
- * Не дало эффекта
- * 
-drop table inventory.kafka_store_data ON CLUSTER '{cluster}' ;
 
+
+
+
+--
+-- MS SQL Server Sync
+--
+
+/* Не дало эффекта
+drop table inventory.kafka_store_data ON CLUSTER '{cluster}' ;
 CREATE TABLE inventory.kafka_store_data  ON CLUSTER '{cluster}' (
        store_id  UInt32,
        store_name String,
@@ -74,10 +83,9 @@ CREATE TABLE inventory.kafka_store_data  ON CLUSTER '{cluster}' (
                 kafka_topic_list = 'inventory.dbo.store_data',
                 kafka_group_name = 'inventory-consumer-group',
                 kafka_format = 'JSONEachRow'; 
-                
-   
- drop table inventory.ch_store_data ON CLUSTER '{cluster}' ;
- CREATE TABLE inventory.ch_store_data ON CLUSTER  '{cluster}' (
+
+drop table inventory.ch_store_data ON CLUSTER '{cluster}' ;
+CREATE TABLE inventory.ch_store_data ON CLUSTER  '{cluster}' (
         store_id  UInt32,
         store_name String,
         store_address Nullable(String),
@@ -86,8 +94,7 @@ CREATE TABLE inventory.kafka_store_data  ON CLUSTER '{cluster}' (
 ) ENGINE = ReplicatedMergeTree ('/clickhouse/tables/{shard}/ch_store_data', '{replica}')
 ORDER BY (store_id);
 
-
-drop VIEW inventory.materialized_store_data ON CLUSTER '{cluster}'; 
+drop VIEW inventory.materialized_store_data ON CLUSTER '{cluster}';
 CREATE MATERIALIZED VIEW materialized_store_data ON CLUSTER '{cluster}' TO ch_store_data
 AS SELECT  store_id, store_name, store_address, store_location, description
 FROM kafka_store_data;
